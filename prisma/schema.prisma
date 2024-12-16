@@ -1,0 +1,176 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["views"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String?
+  password  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AdAccount {
+  id        Int      @id @default(autoincrement())
+  source    String
+  accountId String
+  name      String?
+  timeZone  String
+  status    String
+  updatedAt DateTime @updatedAt
+}
+
+model AdSetsHistory {
+  id           Int      @id @default(autoincrement())
+  status       String
+  adaccount_id String
+  name         String
+  country      Json?
+  daily_budget Int
+  created_time DateTime
+  start_time   DateTime
+  createdAt    DateTime @default(now())
+  adset_id     String
+}
+
+model AdSets {
+  id           Int      @id @default(autoincrement())
+  status       String
+  adaccount_id String
+  name         String
+  country      Json?
+  daily_budget Int
+  created_time DateTime
+  start_time   DateTime
+  createdAt    DateTime @default(now())
+  adset_id     String   @unique
+}
+
+model DmReportingHistory {
+  id          Int      @id @default(autoincrement())
+  advertiser  String
+  domain      String
+  manager     String?
+  buyer       String
+  campaignId  String
+  adset       String?
+  revenue     Float
+  spend       Float
+  link_clicks Int
+  ad_clicks   Int
+  gp          Float
+  searches    Int
+  clicks      Int
+  tq          Int
+  start_time  DateTime
+  adset_id    String?
+  market      String?
+  category    String?
+  createdAt   DateTime @default(now())
+}
+
+model DmReporting {
+  id          Int      @id @default(autoincrement())
+  advertiser  String
+  domain      String
+  manager     String?
+  buyer       String
+  campaignId  String
+  adset       String?
+  revenue     Float
+  spend       Float
+  link_clicks Int
+  ad_clicks   Int
+  gp          Float
+  searches    Int
+  clicks      Int
+  tq          Int
+  start_time  DateTime
+  adset_id    String?
+  market      String?
+  category    String?
+  createdAt   DateTime @default(now())
+
+  @@unique([start_time, adset_id])
+}
+
+model Automation {
+  id                   Int       @id @default(autoincrement())
+  rules                Json?
+  name                 String?
+  automationInMinutes  String?
+  options              String?
+  budgetType           String?
+  actionStatus         String?
+  budgetPercent        String?
+  budgetAmount         String?
+  lastRun              DateTime?
+  nextRun              DateTime?
+  displayText          String?   @db.Text
+  postToDatabase       Boolean   @default(true)
+  status               String?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  blockAdset           String?
+  includeAdset         String?
+  duplicateAdSetAmount String?
+  numOfDuplicateAdSet  String?
+  duplicateAdSetName   String?
+}
+
+view v_spendreport {
+  reportDate   DateTime @db.Date
+  adset_id     String
+  adCost       Float?
+  revenue      Float?
+  profit       Float?
+  margin       Float?
+  clicks       Decimal? @db.Decimal(32, 0)
+  daily_budget Int?
+  daysPassed   Int?
+
+  @@id([reportDate, adset_id])
+}
+
+model AutomationLog {
+  id                Int      @id @default(autoincrement())
+  automationId      Int
+  rules             String?  @db.Text
+  action            String?  @db.Text
+  adset_id          String?
+  actionDisplayText String?
+  query             String?  @db.Text
+  previous_value    Json?
+  new_value         Json?
+  createdAt         DateTime @default(now())
+}
+
+model CategoryRPC {
+  id       Int     @id @default(autoincrement())
+  category String?
+  country  String?
+  RPC      Float?
+}
+
+model ManualLog {
+  id           Int      @id @default(autoincrement())
+  adset_id     String
+  action       String
+  new_budget   Float
+  status       String
+  remarks      String
+  created_time DateTime
+}
+
+model BudgetAdjustment {
+  id                     Int       @id @default(autoincrement())
+  adset_id               String    @unique
+  last_budget_adjustment DateTime?
+}

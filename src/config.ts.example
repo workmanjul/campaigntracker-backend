@@ -1,0 +1,8 @@
+export const JWT_SECRET_TOKEN = 'something';
+export const DM_REPORTING_URL = 'https://api.dm-reporting.com/api_gp?aff=hudson%20interactive'
+export const DM_REPORTING_ACCESS_KEY = '';
+export const DM_REPORTING_ACCESS_TOKEN = '';
+export const FACEBOOK_API_URL = 'https://graph.facebook.com/v16.0/';
+export const FACEBOOK_ACCESS_TOKEN = '';
+export const COOKIE_DOMAIN = 'localhost';
+export const RUN_CRON = 'no'
